@@ -34,7 +34,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Coffee Valley</a>
+        <a class="navbar-brand" href="/">Coffee Valley</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -66,39 +66,104 @@
 
 <!--MAIN-->
 <div class="container mt-3">
-    <h2>Add Distributors</h2>
-    <hr>
-    <form action="/orderstatus/add" method="post">
-        <input type="hidden" name="id" value="{{ .Id }}">
-        <div class="form-group">
-            <label>Distributor Name</label>
-            <input type="text" name="name" value="{{ .Nama }}" class="form-control">
+    <div class="d-flex justify-content-center">
+        <div style="max-width: 500px; width: 100%;">
+            <h2 class="text-center">Update Order</h2>
+            <hr>
+            <form action="/orderstatus/edit" method="post">
+                <input type="hidden" name="id" value="{{ .Id }}">
+                <div class="form-group">
+                    <label>Bean</label>
+                    <select name="bean" class="form-control" id="bean-select">
+                        <option value="" disabled>Select Bean</option>
+                        <option value="Cubita">Cubita</option>
+                        <option value="Colombian Supermo">Colombian Supermo</option>
+                        <option value="Pure Kona Fancy">Pure Kona Fancy</option>
+                        <option value="Kenyan">Kenyan</option>
+                        <option value="Costa Rican">Costa Rican</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="text" name="price" class="form-control" id="price" readonly style="background-color: #e9f7fe; color: #000;">
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <select name="quantity" class="form-control" id="quantity-select">
+                        <option value="" disabled>Select Quantity</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Total</label>
+                    <input type="text" name="total" class="form-control" id="total" readonly style="background-color: #e9f7fe; color: #000;">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <input type="text" name="status" class="form-control" id="status" readonly>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-success btn-block">Update</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label>City</label>
-            <input type="text" name="city" value="{{ .City }}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Region</label>
-            <input type="text" name="region" value="{{ .Region }}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Country</label>
-            <input type="text" name="country" value="{{ .Country }}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Phone</label>
-            <input type="text" name="phone" value="{{ .Phone }}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="text" name="email" value="{{ .Email }}" class="form-control">
-        </div>
-        <br>
-        <button type="submit" class="btn btn-success btn-block">Add</button>
-    </form>
-</div>
+    </div>
 
+    <script>
+        // Pre-fill form with existing data
+        const existingData = {
+            bean: "Colombian Supermo", // Replace with actual data from the database
+            price: "$13.50",          // Replace with actual data from the database
+            quantity: "3",            // Replace with actual data from the database
+            total: "$40.50",          // Replace with actual data from the database
+            status: "Pending"         // Replace with actual data from the database
+        };
+
+        // Populate form fields with existing data
+        document.getElementById('bean-select').value = existingData.bean;
+        document.getElementById('price').value = existingData.price;
+        document.getElementById('quantity-select').value = existingData.quantity;
+        document.getElementById('total').value = existingData.total;
+        document.getElementById('status').value = existingData.status;
+
+        // Update price and total dynamically
+        const beanSelect = document.getElementById('bean-select');
+        const priceInput = document.getElementById('price');
+        const quantitySelect = document.getElementById('quantity-select');
+        const totalInput = document.getElementById('total');
+
+        const prices = {
+            "Cubita": "$12.00",
+            "Colombian Supermo": "$13.50",
+            "Pure Kona Fancy": "$15.90",
+            "Kenyan": "$24.00",
+            "Costa Rican": "$12.30"
+        };
+
+        function calculateTotal() {
+            const price = parseFloat(priceInput.value.replace('$', '')) || 0;
+            const quantity = parseInt(quantitySelect.value) || 0;
+            const total = price * quantity;
+            totalInput.value = total ? `$${total.toFixed(2)}` : '';
+        }
+
+        beanSelect.addEventListener('change', function () {
+            priceInput.value = prices[this.value] || '';
+            calculateTotal();
+        });
+
+        quantitySelect.addEventListener('change', calculateTotal);
+    </script>
+
+</div>
 
 <!-- Footer -->
 <footer class="mt-5 text-center">

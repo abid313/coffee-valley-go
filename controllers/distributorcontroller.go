@@ -39,7 +39,7 @@ func IndexDistributor(w http.ResponseWriter, r *http.Request) {
 				if len(distributors) == 0 {
 					fmt.Println("No distributors found!")
 				}
-				temp, _ := template.ParseFiles("views/orderstatus.html")
+				temp, _ := template.ParseFiles("views/distributors.html")
 				temp.Execute(w, distributors)
 			}
 
@@ -49,7 +49,7 @@ func IndexDistributor(w http.ResponseWriter, r *http.Request) {
 
 func AddDistributor(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		temp, _ := template.ParseFiles("views/addorderstatus.html")
+		temp, _ := template.ParseFiles("views/adddistributors.html")
 		temp.Execute(w, nil)
 	} else if r.Method == "POST" {
 		// Proses login: ambil data dari form
@@ -68,14 +68,14 @@ func AddDistributor(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		http.Redirect(w, r, "/orderstatus", http.StatusSeeOther)
+		http.Redirect(w, r, "/distributors", http.StatusSeeOther)
 	}
 }
 
 func EditDistributor(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		// Parse the template
-		temp, err := template.ParseFiles("views/editorderstatus.html")
+		temp, err := template.ParseFiles("views/editdistributors.html")
 		if err != nil {
 			http.Error(w, "Error loading template", http.StatusInternalServerError)
 			return
@@ -83,6 +83,7 @@ func EditDistributor(w http.ResponseWriter, r *http.Request) {
 
 		// Get the "Id" query parameter
 		idString := r.URL.Query().Get("Id")
+		fmt.Println("Berikut Id-nya:", idString)
 		if idString == "" {
 			http.Error(w, "Missing Id", http.StatusBadRequest)
 			return
@@ -105,5 +106,46 @@ func EditDistributor(w http.ResponseWriter, r *http.Request) {
 
 	} else if r.Method == "POST" {
 		// Handle POST request here (e.g., saving the form data)
+		r.ParseForm()
+
+		// Get the "Id" query parameter
+		idString := r.Form.Get("id")
+		if idString == "" {
+			http.Error(w, "Missing Id", http.StatusBadRequest)
+			return
+		}
+		fmt.Println(idString)
+		// Update distributor details using the id
+		err := UserModel.UpdateDistributor(idString, r.Form.Get("name"), r.Form.Get("city"), r.Form.Get("region"), r.Form.Get("country"), r.Form.Get("phone"), r.Form.Get("email"))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// Redirect to the distributor list page after updating
+		http.Redirect(w, r, "/distributors", http.StatusSeeOther)
+	}
+}
+
+func DeleteDistributor(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		// Get the "Id" query parameter
+		idString := r.URL.Query().Get("Id")
+		fmt.Println("Berikut Id Stringnya:", idString)
+		if idString == "" {
+			http.Error(w, "Missing Id", http.StatusBadRequest)
+			return
+		}
+
+		// Fetch distributor details using the id
+		err := UserModel.DeleteDistributor(idString) // Pass the integer ID
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Redirect to the distributor list page after deleting
+		http.Redirect(w, r, "/distributors", http.StatusSeeOther)
+	} else {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }

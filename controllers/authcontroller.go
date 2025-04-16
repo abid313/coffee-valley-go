@@ -6,9 +6,10 @@ import (
 	"WebsiteDataOn/models"
 	"errors"
 	"fmt"
-	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // UserInput adalah struktur data untuk menerima input username dan password dari form login

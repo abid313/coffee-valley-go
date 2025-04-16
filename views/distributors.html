@@ -64,17 +64,33 @@
     </div>
 </nav>
 
-<!-- Main Content -->
-<div class="container mt-5">
-    <h3><b>Bean of the Day</b></h3>
-    <p>{{ .Bean }}</p>
+<!--MAIN-->
+<div class="container mt-3">
+    <h2 class="text-center">List Distributors</h2>
     <hr>
-    <h3><b>Sales Price</b></h3>
-    <p>{{ .Price }}</p>
-    <hr>
-    <h3><b>Description</b></h3>
-    <p>{{ .Description }}</p>
-    <hr>
+    <table class="table table-bordered mt-2 text-center">
+        <thead>
+        <tr>
+            <th>Distributor Name</th>
+            <th>City</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{ range . }}
+        <tr>
+            <td>{{ .Nama }}</td>
+            <td>{{ .City }}</td>
+            <td>
+                <a href="/distributors/edit?Id={{ .Id }}" class="badge bg-primary text-decoration-none">Edit</a>
+                <a href="/distributors/delete?Id={{ .Id }}" class="badge bg-danger text-decoration-none">Delete</a>
+            </td>
+        </tr>
+        {{ end }}
+        </tbody>
+    </table>
+    <p><a href="/distributors/add" class="badge bg-success text-decoration-none">Add Distributor</a></p>
+
 </div>
 
 <!-- Footer -->

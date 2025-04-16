@@ -15,10 +15,18 @@ func main() {
 	// catalog
 	http.HandleFunc("/catalog", controller.IndexCatalog)
 
-	// orderstatus
-	http.HandleFunc("/orderstatus", controller.IndexDistributor)
-	http.HandleFunc("/orderstatus/add", controller.AddDistributor)
-	http.HandleFunc("/orderstatus/edit", controller.EditDistributor)
+	// Distributors
+	http.HandleFunc("/distributors", controller.IndexDistributor)
+	http.HandleFunc("/distributors/add", controller.AddDistributor)
+	http.HandleFunc("/distributors/edit", controller.EditDistributor)
+	http.HandleFunc("/distributors/delete", controller.DeleteDistributor)
+
+	// Order Status
+	http.HandleFunc("/orderstatus", controller.IndexOrderStatus)
+	http.HandleFunc("/orderstatus/add", controller.AddOrderStatus)
+	http.HandleFunc("/orderstatus/edit", controller.EditOrderStatus)
+	http.HandleFunc("/orderstatus/delete", controller.DeleteOrderStatus)
+	http.HandleFunc("/orderstatus/markdone", controller.MarkDoneOrderStatus)
 
 	fmt.Println("Server started at port http://localhost:8080")
 	fmt.Println(http.ListenAndServe(":8080", nil))

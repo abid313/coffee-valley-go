@@ -66,80 +66,39 @@
 
 <!--MAIN-->
 <div class="container mt-3">
-    <h2 class="text-center">Add Order</h2>
+    <h2 class="text-center">Update Data Distributors</h2>
     <hr>
-    <form action="/orderstatus/add" method="post">
+    <form action="/distributors/edit" method="post">
+        <input type="hidden" name="id" value="{{ .Id }}">
         <div class="form-group">
-            <label>Bean</label>
-            <select name="bean" class="form-control">
-                <option value="" disabled selected>Select Bean</option>
-                <option value="Cubita">Cubita</option>
-                <option value="Colombian Supermo">Colombian Supermo</option>
-                <option value="Pure Kona Fancy">Pure Kona Fancy</option>
-                <option value="Kenyan">Kenyan</option>
-                <option value="Costa Rican">Costa Rican</option>
-            </select>
+            <label>Distributor Name</label>
+            <input type="text" name="name" value="{{ .Nama }}" class="form-control">
         </div>
         <div class="form-group">
-            <label>Price</label>
-            <input type="text" name="price" class="form-control" id="price" readonly style="background-color: #e9f7fe; color: #000;">
-            <script>
-            document.querySelector('select[name="bean"]').addEventListener('change', function() {
-                const prices = {
-                "Cubita": "$12.00",
-                "Colombian Supermo": "$13.50",
-                "Pure Kona Fancy": "$15.90",
-                "Kenyan": "$24.00",
-                "Costa Rican": "$12.30"
-                };
-                document.getElementById('price').value = prices[this.value] || '';
-            });
-            </script>
+            <label>City</label>
+            <input type="text" name="city" value="{{ .City }}" class="form-control">
         </div>
         <div class="form-group">
-            <label>Quantity</label>
-            <select name="quantity" class="form-control">
-                <option value="" disabled selected>Select Quantity</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select></select>
+            <label>Region</label>
+            <input type="text" name="region" value="{{ .Region }}" class="form-control">
         </div>
         <div class="form-group">
-            <label>Total</label>
-            <input type="text" name="total" class="form-control" id="total" readonly style="background-color: #e9f7fe; color: #000;">
+            <label>Country</label>
+            <input type="text" name="country" value="{{ .Country }}" class="form-control">
         </div>
-        <script>
-            const priceInput = document.getElementById('price');
-            const quantitySelect = document.querySelector('select[name="quantity"]');
-            const totalInput = document.getElementById('total');
-
-            function calculateTotal() {
-            const price = parseFloat(priceInput.value.replace('$', '')) || 0;
-            const quantity = parseInt(quantitySelect.value) || 0;
-            const total = price * quantity;
-            totalInput.value = total ? `$${total.toFixed(2)}` : '';
-            }
-
-            document.querySelector('select[name="bean"]').addEventListener('change', calculateTotal);
-            quantitySelect.addEventListener('change', calculateTotal);
-        </script>
         <div class="form-group">
-            <label>Status</label>
-            <input type="text" name="status" class="form-control" value="Pending" readonly>
+            <label>Phone</label>
+            <input type="text" name="phone" value="{{ .Phone }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" name="email" value="{{ .Email }}" class="form-control">
         </div>
         <br>
-        <button type="submit" class="btn btn-success btn-block">Add</button>
+        <button type="submit" class="btn btn-success btn-block">Update</button>
     </form>
-
 </div>
+
 
 <!-- Footer -->
 <footer class="mt-5 text-center">

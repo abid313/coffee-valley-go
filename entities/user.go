@@ -23,3 +23,12 @@ type Distributor struct {
 	Phone   string
 	Email   string
 }
+
+type OrderStatus struct {
+	Id       int64
+	Bean     string
+	Price    float64
+	Quantity int64
+	Total    float64
+	Status   string
+}

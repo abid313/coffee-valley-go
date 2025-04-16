@@ -147,3 +147,100 @@ func (u UserModel) EditDetailDistributor(fieldId string) (distributor *entities.
 
 	return distributor, nil
 }
+
+func (u *UserModel) UpdateDistributor(id string, name string, city string, region string, country string, phone string, email string) error {
+	query := `UPDATE distributors SET Nama = ?, City = ?, Region = ?, Country = ?, Phone = ?, Email = ? WHERE Id = ?`
+	_, err := u.db.Exec(query, name, city, region, country, phone, email, id)
+	if err != nil {
+		return fmt.Errorf("error updating distributor: %w", err)
+	}
+	return nil
+}
+
+func (u *UserModel) DeleteDistributor(id string) error {
+	query := `DELETE FROM distributors WHERE Id = ?`
+	_, err := u.db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("error deleting distributor: %w", err)
+	}
+	return nil
+}
+
+func (u *UserModel) GetAllOrderStatus(orderStatus *entities.OrderStatus) ([]entities.OrderStatus, error) {
+	row, err := u.db.Query("select * from orderstatus")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer row.Close()
+
+	var orderStatusAll []entities.OrderStatus
+	for row.Next() {
+		err := row.Scan(&orderStatus.Id, &orderStatus.Bean, &orderStatus.Price, &orderStatus.Quantity, &orderStatus.Total, &orderStatus.Status)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Println(orderStatus) // Menampilkan data dari database
+		orderStatusAll = append(orderStatusAll, *orderStatus)
+	}
+
+	return orderStatusAll, nil
+}
+
+func (u *UserModel) AddOrderStatus(bean string, price float64, quantity int, total float64, status string) error {
+	// Validate input parameters
+	if bean == "" || price < 0 || quantity < 0 || total < 0 || status == "" {
+		return fmt.Errorf("invalid input parameters")
+	}
+
+	query := `INSERT INTO orderstatus (Bean, Price, Quantity, Total, Status) VALUES (?, ?, ?, ?, ?)`
+	_, err := u.db.Exec(query, bean, price, quantity, total, status)
+	if err != nil {
+		return fmt.Errorf("error adding order status: %w", err)
+	}
+	return nil
+}
+
+func (u *UserModel) DeleteOrderStatus(id string) error {
+	query := `DELETE FROM orderstatus WHERE Id = ?`
+	_, err := u.db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("error deleting order status: %w", err)
+	}
+	return nil
+}
+
+func (u *UserModel) GetOrderStatusById(id string) (*entities.OrderStatus, error) {
+	query := `SELECT * FROM orderstatus WHERE Id = ?`
+	row := u.db.QueryRow(query, id)
+
+	orderStatus := &entities.OrderStatus{}
+	err := row.Scan(&orderStatus.Id, &orderStatus.Bean, &orderStatus.Price, &orderStatus.Quantity, &orderStatus.Total, &orderStatus.Status)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("no order status found with id %s", id)
+		}
+		return nil, fmt.Errorf("error fetching order status: %w", err)
+	}
+
+	return orderStatus, nil
+}
+
+func (u *UserModel) UpdateOrderStatus(id string, bean string, price float64, quantity int, total float64, status string) error {
+	query := `UPDATE orderstatus SET Bean = ?, Price = ?, Quantity = ?, Total = ?, Status = ? WHERE Id = ?`
+	_, err := u.db.Exec(query, bean, price, quantity, total, status, id)
+	if err != nil {
+		return fmt.Errorf("error updating order status: %w", err)
+	}
+	return nil
+}
+
+func (u *UserModel) MarkDoneOrderStatus(id string) error {
+	query := `UPDATE orderstatus SET Status = 'Done' WHERE Id = ?`
+	_, err := u.db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("error marking order status as done: %w", err)
+	}
+	return nil
+}
