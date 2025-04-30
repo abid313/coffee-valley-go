@@ -82,3 +82,5 @@ create table orderstatus (
 select * from orderstatus;
 
 drop table orderstatus;
+
+select * from orderstatus;
