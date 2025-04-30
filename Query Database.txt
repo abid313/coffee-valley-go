@@ -1,0 +1,84 @@
+show databases;
+
+use webdataon;
+
+show tables;
+
+create table users (
+	id int(10) primary key,
+    nama varchar(300),
+    email varchar(300),
+    username varchar(50),
+    password varchar(100)
+);
+
+desc users;
+
+INSERT INTO userS VALUES(
+	03, "testlogin2", "test456@gmail.com", "test456", "$2y$10$dTBPNIJqBIaZOKv5CJ5MveVkypeUeu0EjZ0Zr4K7mV.V27WSVIgRu"
+    );
+    
+select * from users;
+
+drop table beans;
+
+CREATE TABLE Beans (
+     Bean VARCHAR(100) NOT NULL,
+     Description VARCHAR(1000) NOT NULL,
+     Price float(9,2) NOT NULL
+);
+
+select * from Beans;
+desc beans;
+drop table beans;
+INSERT INTO beans VALUES
+	('Cubita','Cubita Coffe is Sun dried and hand sorted. It originates from an elevation of over 2000 meters in the Andes Mountains of Ecuador, which is located closest to the sun on the Equator. Superb aroma and rich Flavor.',12.00),
+    ('Colombian Supermo','This smooth, full-flavored coffee from Colombia boasts a sweet delicate aroma and a rich, balanced flavor. A classic coffee appropriate for any occasion.',13.50),
+    ('Pure Kona Fancy','Grown on the Big Islan of Hawaii, this coffee is known for its tantalizing aroma. This medium bodied brew offers a rich flavor with subtle winery tones.',15.90),
+    ('Kenyan','The complex coffee from the highlands of East Africa features a winey. Full flavor coupled with an intriguing aroma. A delightfully delicate selection for coffee lovers',24.00),
+    ('Costa Rican','Arabicas normally set aside for the demanding Northern European market produce this lively, well-balanced coffee distinguished by its snappy, clean taste.',12.30)
+    ;
+    
+select * from beans where price >= 0.0 limit 1;
+
+create table distributors (
+	Id int(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    Nama varchar(300),
+    City varchar(300),
+    Region varchar(300),
+    Country varchar(300),
+    Phone varchar(100),
+    Email varchar(300)
+);
+
+INSERT INTO distributors VALUES
+	(null,'Beans R Us','Brisbane', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,'The Buzz','Murrich', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,'Coffe Galore','Capelle aan den Ussel', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,'Perk Plus','Salem', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,'Cafe Colombian','Hawthorne', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,"Jumpin' Java",'Sydney', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,'Coffee 2000','Munich', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,'The Whole Bean','Alton', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com'),
+    (null,'Roast Resellers','Vancouver', 'Jakarta Pusat', 'Indonesia','085123456781','test1@gmail.com')
+    ;
+    
+select * from distributors where id = 1;
+
+DELETE FROM distributors WHERE Id = 9;
+select * from distributors;
+drop table distributors;
+
+DELETE FROM distributors WHERE nama='Test Distributor';
+
+create table orderstatus (
+	Id int(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    Bean varchar(300),
+    Price float(9,2),
+    Quantity int(255),
+    Total float(9,2),
+    Status varchar(300)
+);
+select * from orderstatus;
+
+drop table orderstatus;
