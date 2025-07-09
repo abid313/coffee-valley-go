@@ -2,23 +2,44 @@ package config
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
+
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 // DBConn adalah fungsi untuk menghubungkan aplikasi dengan database MySQL
-// Fungsi ini akan membuka koneksi ke database dan mengembalikan objek db yang digunakan untuk berinteraksi dengan database.
 func DBConn() (db *sql.DB, err error) {
-	// Menentukan jenis driver database yang digunakan (MySQL)
-	dbDriver := "mysql"
+	// Load .env file
+	err = godotenv.Load()
+	if err != nil {
+		fmt.Println("Gagal load file .env")
+		return nil, err
+	}
 
-	// Menyediakan kredensial untuk mengakses database
-	dbUser := "root"      // Username untuk mengakses database
-	dbPass := "root"      // Password untuk mengakses database
-	dbName := "webdataon" // Nama database yang akan digunakan
+	// Ambil variabel dari environment
+	dbDriver := os.Getenv("DB_DRIVER")
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
 
-	// Membuka koneksi ke database MySQL dengan kredensial yang diberikan
-	db, err = sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
+	// Format DSN
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 
-	// Mengembalikan objek db dan error (jika ada)
-	return db, err
+	// Buka koneksi database
+	db, err = sql.Open(dbDriver, dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	// Test koneksi
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
