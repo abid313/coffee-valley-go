@@ -24,6 +24,15 @@ func NewUserModel() *UserModel {
 	}
 }
 
+// fungsi Register untuk menyimpan data user baru ke dalam database
+func (u UserModel) Register(user *entities.User) error {
+	_, err := u.db.Exec("INSERT INTO users VALUES (null, ?, ?, ?, ?)", user.NamaLengkap, user.Email, user.Username, user.Password)
+	if err != nil {
+		return err // Mengembalikan error jika terjadi kesalahan saat eksekusi query
+	}
+	return nil // Mengembalikan nil jika tidak ada error, artinya data berhasil disimpan
+}
+
 // Fungsi Where mencari data user berdasarkan field tertentu dan nilai field tersebut
 func (u UserModel) Where(user *entities.User, fieldName, fieldValue string) error {
 	// Menjalankan query SQL untuk mengambil data user berdasarkan nama field dan nilainya

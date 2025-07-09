@@ -10,6 +10,7 @@ func main() {
 	// Auth Login dan Logout
 	http.HandleFunc("/", controller.Index)
 	http.HandleFunc("/login", controller.Login)
+	http.HandleFunc("/register", controller.Register)
 	http.HandleFunc("/logout", controller.Logout)
 
 	// catalog

@@ -48,6 +48,58 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Register adalah handler untuk menangani pendaftaran pengguna baru
+func Register(w http.ResponseWriter, r *http.Request) {
+	// Jika request method adalah GET, tampilkan halaman pendaftaran
+	if r.Method == "GET" {
+		temp, _ := template.ParseFiles("views/register.html")
+		temp.Execute(w, nil)
+	} else if r.Method == "POST" {
+		r.ParseForm()
+		// Proses pendaftaran: ambil data dari form langsung ke entities.User
+		user := &entities.User{
+			NamaLengkap: r.Form.Get("namalengkap"),
+			Email:       r.Form.Get("email"),
+			Username:    r.Form.Get("username"),
+			Password:    r.Form.Get("password"),
+		}
+
+		// Cek apakah username sudah ada di database
+		var existingUser entities.User
+		UserModel.Where(&existingUser, "username", user.Username)
+		if existingUser.Username != "" {
+			// Jika username sudah ada, beri pesan error
+			data := map[string]interface{}{
+				"error": errors.New("Username sudah terdaftar!"),
+			}
+			temp, _ := template.ParseFiles("views/register.html")
+			temp.Execute(w, data)
+			return
+		}
+		// Hash password sebelum menyimpannya ke database
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			http.Error(w, "Error hashing password", http.StatusInternalServerError)
+			return
+		}
+		user.Password = string(hashedPassword)
+		// Simpan pengguna baru ke database
+		err = UserModel.Register(user)
+		if err != nil {
+			http.Error(w, "Error saving user to database", http.StatusInternalServerError)
+			return
+		}
+		// Tampilkan pop up sukses, lalu redirect ke login setelah user klik OK
+		w.Header().Set("Content-Type", "text/html")
+		fmt.Fprint(w, `
+			<script>
+				alert("Registrasi berhasil! Silakan login.");
+				window.location.href = "/login";
+			</script>
+		`)
+	}
+}
+
 // Login adalah handler untuk menangani login pengguna
 func Login(w http.ResponseWriter, r *http.Request) {
 	// Jika request method adalah GET, tampilkan halaman login
