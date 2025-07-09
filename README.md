@@ -1,2 +1,1 @@
-# WebDevOn
-Practical Test DevOn
+A Golang-based web application for Coffee Valley, currently under development and maintenance.
