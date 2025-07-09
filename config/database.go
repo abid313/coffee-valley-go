@@ -6,11 +6,19 @@ import (
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 // DBConn adalah fungsi untuk menghubungkan aplikasi dengan database MySQL
 func DBConn() (db *sql.DB, err error) {
-	// Ambil variabel dari environment (Railway akan menyediakannya via dashboard)
+	// Load .env file
+	err = godotenv.Load()
+	if err != nil {
+		fmt.Println("Gagal load file .env")
+		return nil, err
+	}
+
+	// Ambil variabel dari environment
 	dbDriver := os.Getenv("DB_DRIVER")
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
